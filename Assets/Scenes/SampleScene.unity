@@ -624,6 +624,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1626677204}
   - component: {fileID: 1626677203}
+  - component: {fileID: 1626677205}
   m_Layer: 0
   m_Name: TetrisController
   m_TagString: Untagged
@@ -646,6 +647,7 @@ MonoBehaviour:
   width: 10
   height: 20
   gameplaySpeed: 1
+  pieceGenerator: {fileID: 1626677205}
 --- !u!4 &1626677204
 Transform:
   m_ObjectHideFlags: 0
@@ -661,6 +663,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1626677205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626677202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28da4b3e02644eddaad99beff130b598, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

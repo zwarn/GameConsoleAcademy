@@ -5,20 +5,17 @@ namespace tetris
 {
     public class TetrisController : MonoBehaviour
     {
+        [SerializeField] public int width = 10;
+        [SerializeField] public int height = 20;
+        [SerializeField] private float gameplaySpeed = 1f;
+        [SerializeField] private PieceGenerator pieceGenerator;
 
-        [SerializeField]
-        public int width = 10;
-        [SerializeField]
-        public int height = 20;
-        [SerializeField]
-        private float gameplaySpeed = 1f;
-        
         private TetrisSystem _tetrisSystem;
         private float _timeAccumulator;
 
         private void Awake()
         {
-            _tetrisSystem = new TetrisSystem(width, height);
+            _tetrisSystem = new TetrisSystem(width, height, pieceGenerator);
         }
 
         private void Update()
@@ -29,7 +26,7 @@ namespace tetris
                 _timeAccumulator -= gameplaySpeed;
                 _tetrisSystem.Drop();
             }
-            
+
             HandleInput();
         }
 

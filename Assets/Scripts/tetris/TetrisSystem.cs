@@ -7,21 +7,22 @@ namespace tetris
 {
     public class TetrisSystem
     {
-
         public event Action<Piece> OnPiecePlaced;
         public event Action<Piece> OnPieceSpawned;
-        
+
         private readonly int _width;
         private readonly int _height;
         private readonly Dictionary<Vector2Int, Tile> _placedTiles = new();
+        private readonly PieceGenerator _pieceGenerator;
 
         public Piece CurrentPiece;
         public Piece NextPiece;
 
-        public TetrisSystem(int width, int height)
+        public TetrisSystem(int width, int height, PieceGenerator pieceGenerator)
         {
             _width = width;
             _height = height;
+            _pieceGenerator = pieceGenerator;
             CurrentPiece = GeneratePiece();
             NextPiece = GeneratePiece();
         }
@@ -46,8 +47,8 @@ namespace tetris
 
             var copy = CurrentPiece.Copy();
             copy.Move(direction);
-            
-            if (!IsColliding(CurrentPiece))
+
+            if (!IsColliding(copy))
             {
                 CurrentPiece.Move(direction);
             }
@@ -62,8 +63,8 @@ namespace tetris
 
             var copy = CurrentPiece.Copy();
             copy.Rotate(direction);
-            
-            if (!IsColliding(CurrentPiece))
+
+            if (!IsColliding(copy))
             {
                 CurrentPiece.Rotate(direction);
             }
@@ -78,10 +79,14 @@ namespace tetris
 
             var copy = CurrentPiece.Copy();
             copy.Move(Vector2Int.down);
-            
-            if (IsColliding(CurrentPiece))
+
+            if (IsColliding(copy))
             {
                 LockPiece();
+            }
+            else
+            {
+                CurrentPiece.Move(Vector2Int.down);
             }
         }
 
@@ -96,19 +101,12 @@ namespace tetris
             CurrentPiece = NextPiece;
             NextPiece = GeneratePiece();
             PieceSpawnedEvent(CurrentPiece);
-
         }
 
         private Piece GeneratePiece()
         {
-            var tiles = new Dictionary<Vector2Int, Tile>()
-            {
-                {new Vector2Int(0,0), new Tile(0)},
-                {new Vector2Int(1,0), new Tile(0)},
-                {new Vector2Int(1,1), new Tile(1)},
-                {new Vector2Int(0,1), new Tile(1)},
-            };
-            return new Piece(0, new Vector2Int(_width / 2, _height - 3), tiles);
+            //TODO: check if generating at this position is possible otherwise shift position or end the game
+            return _pieceGenerator.GeneratePiece(new Vector2Int(_width / 2, _height - 3));
         }
 
         protected virtual void PiecePlacedEvent(Piece piece)
