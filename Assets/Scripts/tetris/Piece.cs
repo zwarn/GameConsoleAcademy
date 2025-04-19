@@ -8,7 +8,7 @@ namespace tetris
 {
     public class Piece
     {
-        public int Rotation { get; private set;}
+        public int Rotation { get; private set; }
         public Vector2Int Position { get; set; }
 
         private readonly Dictionary<Vector2Int, Tile>[] _rotatedTiles;
@@ -24,6 +24,18 @@ namespace tetris
                 tiles.ToDictionary(tile => new Vector2Int(-tile.Key.x, -tile.Key.y), tile => tile.Value),
                 tiles.ToDictionary(tile => new Vector2Int(tile.Key.y, -tile.Key.x), tile => tile.Value),
             };
+        }
+
+        private Piece(Piece other)
+        {
+            Rotation = other.Rotation;
+            Position = other.Position;
+            _rotatedTiles = other._rotatedTiles;
+        }
+
+        public Piece Copy()
+        {
+            return new Piece(this);
         }
 
         public void Move(Vector2Int dir)
@@ -56,7 +68,7 @@ namespace tetris
         {
             return _rotatedTiles[Rotation];
         }
-        
+
         public Dictionary<Vector2Int, Tile> GetRotatedTranslatedTiles()
         {
             return _rotatedTiles[Rotation].ToDictionary(tile => tile.Key + Position, tile => tile.Value);

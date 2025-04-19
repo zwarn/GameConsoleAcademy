@@ -43,11 +43,13 @@ namespace tetris
             {
                 return;
             }
+
+            var copy = CurrentPiece.Copy();
+            copy.Move(direction);
             
-            CurrentPiece.Move(direction);
-            if (IsColliding(CurrentPiece))
+            if (!IsColliding(CurrentPiece))
             {
-                CurrentPiece.Move(new Vector2Int(-direction.x, -direction.y));
+                CurrentPiece.Move(direction);
             }
         }
 
@@ -57,20 +59,28 @@ namespace tetris
             {
                 return;
             }
+
+            var copy = CurrentPiece.Copy();
+            copy.Rotate(direction);
             
-            CurrentPiece.Rotate(direction);
-            if (IsColliding(CurrentPiece))
+            if (!IsColliding(CurrentPiece))
             {
-                CurrentPiece.Rotate(-direction);
+                CurrentPiece.Rotate(direction);
             }
         }
 
         public void Drop()
         {
-            CurrentPiece.Move(Vector2Int.down);
+            if (CurrentPiece == null)
+            {
+                return;
+            }
+
+            var copy = CurrentPiece.Copy();
+            copy.Move(Vector2Int.down);
+            
             if (IsColliding(CurrentPiece))
             {
-                CurrentPiece.Move(Vector2Int.up);
                 LockPiece();
             }
         }
