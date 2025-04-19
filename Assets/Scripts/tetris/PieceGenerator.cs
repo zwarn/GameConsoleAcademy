@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace tetris
 {
     public class PieceGenerator : MonoBehaviour
     {
-        private int numberOfColors = 5;
+        private int numberOfColors = 3;
         private int tilesPerPiece = 4;
 
         public Piece GeneratePiece(Vector2Int position)
@@ -31,10 +33,10 @@ namespace tetris
         private Tile[] GenerateColors()
         {
             Tile[] result = new Tile[tilesPerPiece];
+            int color = Random.Range(0, numberOfColors);
 
             for (int i = 0; i < tilesPerPiece; i++)
             {
-                int color = Random.Range(0, numberOfColors);
                 result[i] = new Tile(color);
             }
 
@@ -43,14 +45,34 @@ namespace tetris
 
         private Vector2Int[] GeneratePositions()
         {
-            Vector2Int[] result = new Vector2Int[tilesPerPiece];
+            var shapes = Enum.GetValues(typeof(TetrisShape));
+            var shape = (TetrisShape)shapes.GetValue(Random.Range(0, shapes.Length));
+            return GeneratePositions(shape);
+        }
 
-            result[0] = new Vector2Int(0, 0);
-            result[1] = new Vector2Int(0, 1);
-            result[2] = new Vector2Int(1, 1);
-            result[3] = new Vector2Int(1, 0);
+        private Vector2Int[] GeneratePositions(TetrisShape shape)
+        {
+            return shape switch
+            {
+                TetrisShape.I => new Vector2Int[] { new(0, 0), new(-1, 0), new(1, 0), new(2, 0) },
+                TetrisShape.O => new Vector2Int[] { new(0, 0), new(1, 0), new(1, 1), new(0, 1) },
+                TetrisShape.L => new Vector2Int[] { new(0, 0), new(-1, 0), new(-2, 0), new(0, 1) },
+                TetrisShape.J => new Vector2Int[] { new(0, 0), new(1, 0), new(2, 0), new(0, 1) },
+                TetrisShape.S => new Vector2Int[] { new(0, 0), new(-1, 0), new(0, 1), new(1, 1) },
+                TetrisShape.Z => new Vector2Int[] { new(0, 0), new(1, 0), new(0, 1), new(-1, 1) },
+                TetrisShape.T => new Vector2Int[] { new(0, 0), new(1, 0), new(0, 1), new(-1, 0) },
+            };
+        }
 
-            return result;
+        private enum TetrisShape
+        {
+            I,
+            O,
+            L,
+            J,
+            S,
+            Z,
+            T,
         }
     }
 }
