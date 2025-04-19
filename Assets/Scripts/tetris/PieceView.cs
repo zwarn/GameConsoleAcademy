@@ -7,15 +7,21 @@ public class PieceView : MonoBehaviour
 {
     [SerializeField] private TileView tileViewPrefab;
     [SerializeField] private Transform tileViewParent;
-    
+
     private List<TileView> _tileViews = new();
     private Piece _current;
-    
-    
+
+
     public void SetData(Piece piece)
     {
         _current = piece;
         Clear();
+        
+        if (_current == null)
+        {
+            return;
+        }
+
         foreach (var pair in piece.GetTiles())
         {
             var view = Instantiate(tileViewPrefab, tileViewParent);
@@ -30,15 +36,21 @@ public class PieceView : MonoBehaviour
         {
             Destroy(tileView.gameObject);
         }
+
         _tileViews.Clear();
     }
 
     private void Update()
     {
+        if (_current == null)
+        {
+            return;
+        }
+        
         var position = _current.Position;
         transform.position = new Vector3(position.x, position.y);
 
         var rotation = _current.Rotation;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0,90 * rotation));
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90 * rotation));
     }
 }

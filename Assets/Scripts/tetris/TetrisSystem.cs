@@ -12,17 +12,20 @@ namespace tetris
 
         private readonly int _width;
         private readonly int _height;
+        private readonly int _limit;
         private readonly Dictionary<Vector2Int, Tile> _placedTiles = new();
-        private readonly PieceGenerator _pieceGenerator;
+        private Queue<Piece> _pieces;
 
         public Piece CurrentPiece;
         public Piece NextPiece;
+        public bool finished = false;
 
-        public TetrisSystem(int width, int height, PieceGenerator pieceGenerator)
+        public TetrisSystem(int width, int height, Queue<Piece> pieces)
         {
             _width = width;
             _height = height;
-            _pieceGenerator = pieceGenerator;
+            _limit = height - 3;
+            _pieces = pieces;
             CurrentPiece = GeneratePiece();
             NextPiece = GeneratePiece();
         }
@@ -95,18 +98,32 @@ namespace tetris
             foreach (var pair in CurrentPiece.GetRotatedTranslatedTiles())
             {
                 _placedTiles[pair.Key] = pair.Value;
+                if (pair.Key.y >= _limit)
+                {
+                    finished = true;
+                }
             }
 
             PiecePlacedEvent(CurrentPiece);
             CurrentPiece = NextPiece;
             NextPiece = GeneratePiece();
+            if (CurrentPiece == null)
+            {
+                finished = true;
+            }
             PieceSpawnedEvent(CurrentPiece);
         }
 
         private Piece GeneratePiece()
         {
-            //TODO: check if generating at this position is possible otherwise shift position or end the game
-            return _pieceGenerator.GeneratePiece(new Vector2Int(_width / 2, _height - 3));
+            if (_pieces.Count == 0)
+            {
+                return null;
+            }
+
+            var next = _pieces.Dequeue();
+            next.Position = new Vector2Int(_width / 2, _height - 3);
+            return next;
         }
 
         protected virtual void PiecePlacedEvent(Piece piece)

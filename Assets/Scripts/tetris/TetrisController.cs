@@ -15,11 +15,16 @@ namespace tetris
 
         private void Awake()
         {
-            _tetrisSystem = new TetrisSystem(width, height, pieceGenerator);
+            _tetrisSystem = new TetrisSystem(width, height, pieceGenerator.GeneratePieces(25));
         }
 
         private void Update()
         {
+            if (_tetrisSystem.finished)
+            {
+                return;
+            }
+
             _timeAccumulator += Time.deltaTime;
             if (_timeAccumulator >= gameplaySpeed)
             {

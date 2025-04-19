@@ -7,13 +7,25 @@ namespace tetris
 {
     public class PieceGenerator : MonoBehaviour
     {
-        private int numberOfColors = 3;
-        private int tilesPerPiece = 4;
+        private readonly int _numberOfColors = 3;
+        private readonly int _tilesPerPiece = 4;
 
-        public Piece GeneratePiece(Vector2Int position)
+        public Queue<Piece> GeneratePieces(int amount)
+        {
+            Queue<Piece> result = new Queue<Piece>();
+
+            for (int i = 0; i < amount; i++)
+            {
+                result.Enqueue(GeneratePiece());
+            }
+
+            return result;
+        }
+
+        public Piece GeneratePiece()
         {
             var tiles = GenerateTiles();
-            return new Piece(0, position, tiles);
+            return new Piece(0, new Vector2Int(0, 0), tiles);
         }
 
         private Dictionary<Vector2Int, Tile> GenerateTiles()
@@ -22,7 +34,7 @@ namespace tetris
             Tile[] tiles = GenerateColors();
 
             var result = new Dictionary<Vector2Int, Tile>();
-            for (int i = 0; i < tilesPerPiece; i++)
+            for (int i = 0; i < _tilesPerPiece; i++)
             {
                 result.Add(positions[i], tiles[i]);
             }
@@ -32,10 +44,10 @@ namespace tetris
 
         private Tile[] GenerateColors()
         {
-            Tile[] result = new Tile[tilesPerPiece];
-            int color = Random.Range(0, numberOfColors);
+            Tile[] result = new Tile[_tilesPerPiece];
+            int color = Random.Range(0, _numberOfColors);
 
-            for (int i = 0; i < tilesPerPiece; i++)
+            for (int i = 0; i < _tilesPerPiece; i++)
             {
                 result[i] = new Tile(color);
             }
