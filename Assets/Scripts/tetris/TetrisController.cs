@@ -52,12 +52,12 @@ namespace tetris
 
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                _tetrisSystem.Rotate(-1);
+                _tetrisSystem.Rotate(1);
             }
 
             if (Input.GetKeyDown(KeyCode.E))
             {
-                _tetrisSystem.Rotate(1);
+                _tetrisSystem.Rotate(-1);
             }
         }
 
