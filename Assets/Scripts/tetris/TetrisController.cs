@@ -9,6 +9,7 @@ namespace tetris
         [SerializeField] public int height = 20;
         [SerializeField] private float gameplaySpeed = 1f;
         [SerializeField] private PieceGenerator pieceGenerator;
+        [SerializeField] private Camera tetrisCamera;
 
         private TetrisSystem _tetrisSystem;
         private float _timeAccumulator;
@@ -16,6 +17,11 @@ namespace tetris
         private void Awake()
         {
             _tetrisSystem = new TetrisSystem(width, height, pieceGenerator.GeneratePieces(25));
+        }
+
+        private void Start()
+        {
+            tetrisCamera.transform.position = new Vector3(width / 2f, height / 2f, -10);
         }
 
         private void Update()

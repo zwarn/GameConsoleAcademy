@@ -68,7 +68,7 @@ namespace tetris
             {
                 TetrisShape.I => new Vector2Int[] { new(0, 0), new(-1, 0), new(1, 0), new(2, 0) },
                 TetrisShape.O => new Vector2Int[] { new(0, 0), new(1, 0), new(1, 1), new(0, 1) },
-                TetrisShape.L => new Vector2Int[] { new(0, 0), new(-1, 0), new(-2, 0), new(0, 1) },
+                TetrisShape.L => new Vector2Int[] { new(0, 0), new(1, 0), new(-1, 0), new(-1, 1) },
                 TetrisShape.J => new Vector2Int[] { new(0, 0), new(1, 0), new(2, 0), new(0, 1) },
                 TetrisShape.S => new Vector2Int[] { new(0, 0), new(-1, 0), new(0, 1), new(1, 1) },
                 TetrisShape.Z => new Vector2Int[] { new(0, 0), new(1, 0), new(0, 1), new(-1, 1) },

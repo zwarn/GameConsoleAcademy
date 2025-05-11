@@ -17,7 +17,6 @@ namespace tetris
         private Queue<Piece> _pieces;
 
         public Piece CurrentPiece;
-        public Piece NextPiece;
         public bool finished = false;
 
         public TetrisSystem(int width, int height, Queue<Piece> pieces)
@@ -26,8 +25,7 @@ namespace tetris
             _height = height;
             _limit = height - 3;
             _pieces = pieces;
-            CurrentPiece = GeneratePiece();
-            NextPiece = GeneratePiece();
+            CurrentPiece = DequeuePiece();
         }
 
         private bool IsInBounds(Vector2Int position)
@@ -39,6 +37,11 @@ namespace tetris
         {
             return !piece.GetRotatedTranslatedTiles().Select(tile => tile.Key)
                 .All(pos => IsInBounds(pos) && !_placedTiles.ContainsKey(pos));
+        }
+
+        public List<Piece> NextPieces(int num)
+        {
+            return num < 0 ? _pieces.ToList() : _pieces.Take(num).ToList();
         }
 
         public void Move(Vector2Int direction)
@@ -105,16 +108,16 @@ namespace tetris
             }
 
             PiecePlacedEvent(CurrentPiece);
-            CurrentPiece = NextPiece;
-            NextPiece = GeneratePiece();
+            CurrentPiece = DequeuePiece();
             if (CurrentPiece == null)
             {
                 finished = true;
             }
+
             PieceSpawnedEvent(CurrentPiece);
         }
 
-        private Piece GeneratePiece()
+        private Piece DequeuePiece()
         {
             if (_pieces.Count == 0)
             {

@@ -48,7 +48,7 @@ public class PieceView : MonoBehaviour
         }
         
         var position = _current.Position;
-        transform.position = new Vector3(position.x, position.y);
+        transform.localPosition = new Vector3(position.x, position.y);
 
         var rotation = _current.Rotation;
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90 * rotation));
