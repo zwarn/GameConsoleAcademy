@@ -28,6 +28,8 @@ public class PieceView : MonoBehaviour
             view.SetData(pair.Key, pair.Value.Color);
             _tileViews.Add(view);
         }
+        
+        DoUpdate();
     }
 
     private void Clear()
@@ -42,11 +44,16 @@ public class PieceView : MonoBehaviour
 
     private void Update()
     {
+        DoUpdate();
+    }
+
+    private void DoUpdate()
+    {
         if (_current == null)
         {
             return;
         }
-        
+
         var position = _current.Position;
         transform.localPosition = new Vector3(position.x, position.y);
 
