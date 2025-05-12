@@ -7,12 +7,13 @@ namespace tetris
     public class TetrisView : MonoBehaviour
     {
         [SerializeField] private TetrisController tetrisController;
-        
+
         [SerializeField] private PieceView pieceView;
         [SerializeField] private TileView tileViewPrefab;
         [SerializeField] private Transform tileViewParent;
         [SerializeField] private GameObject background;
-        
+        [SerializeField] private Camera tetrisCamera;
+
         public Dictionary<Vector2Int, TileView> placedTiles = new();
 
         private TetrisSystem _tetrisSystem;
@@ -20,7 +21,7 @@ namespace tetris
         private void Start()
         {
             _tetrisSystem = tetrisController.GetTetrisSystem();
-            
+
             _tetrisSystem.OnPieceSpawned += UpdateView;
             _tetrisSystem.OnPiecePlaced += PiecePlaced;
             UpdateView(_tetrisSystem.CurrentPiece);
@@ -28,6 +29,9 @@ namespace tetris
             background.transform.localScale = new Vector3(tetrisController.width, tetrisController.height, 1);
             background.transform.localPosition = new Vector3(tetrisController.width / 2f - 0.5f,
                 tetrisController.height / 2f - 0.5f, 0);
+
+            tetrisCamera.transform.localPosition =
+                new Vector3(tetrisController.width / 2f, tetrisController.height / 2f, -10);
         }
 
         private void OnDestroy()
@@ -35,7 +39,7 @@ namespace tetris
             _tetrisSystem.OnPieceSpawned -= UpdateView;
             _tetrisSystem.OnPiecePlaced -= PiecePlaced;
         }
-        
+
         private void PiecePlaced(Piece piece)
         {
             var newTiles = piece.GetRotatedTranslatedTiles();

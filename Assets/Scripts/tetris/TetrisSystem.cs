@@ -23,14 +23,14 @@ namespace tetris
         {
             _width = width;
             _height = height;
-            _limit = height - 3;
+            _limit = height;
             _pieces = pieces;
             CurrentPiece = DequeuePiece();
         }
 
         private bool IsInBounds(Vector2Int position)
         {
-            return position.x >= 0 && position.x < _width && position.y >= 0 && position.y < _height;
+            return position.x >= 0 && position.x < _width && position.y >= 0;
         }
 
         private bool IsColliding(Piece piece)
@@ -125,7 +125,7 @@ namespace tetris
             }
 
             var next = _pieces.Dequeue();
-            next.Position = new Vector2Int(_width / 2, _height - 3);
+            next.Position = new Vector2Int(_width / 2, _limit + 1);
             return next;
         }
 
