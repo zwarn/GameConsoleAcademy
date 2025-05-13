@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1713293290663625209}
   - component: {fileID: 6195134171492835804}
   m_Layer: 0
-  m_Name: Tile
+  m_Name: ShadowTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,6 +111,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 1713293290663625209}
   colors:
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0, g: 0.049489975, b: 1, a: 1}
-  - {r: 0.98391247, g: 1, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 0.2}
+  - {r: 0, g: 0.049489975, b: 1, a: 0.2}
+  - {r: 0.98391247, g: 1, b: 0, a: 0.2}

@@ -9,6 +9,7 @@ namespace tetris
     {
         public event Action<Piece> OnPiecePlaced;
         public event Action<Piece> OnPieceSpawned;
+        public event Action<Piece> OnUpdateShadow;
 
         private readonly int _width;
         private readonly int _height;
@@ -17,6 +18,7 @@ namespace tetris
         private Queue<Piece> _pieces;
 
         public Piece CurrentPiece;
+        public Piece CurrentShadow;
         public bool finished = false;
 
         public TetrisSystem(int width, int height, Queue<Piece> pieces)
@@ -26,6 +28,27 @@ namespace tetris
             _limit = height;
             _pieces = pieces;
             CurrentPiece = DequeuePiece();
+            UpdateShadow();
+        }
+
+        private void UpdateShadow()
+        {
+            if (CurrentPiece == null)
+            {
+                CurrentShadow = null;
+                UpdateShadowEvent(CurrentShadow);
+                return;
+            }
+
+            var shadow = CurrentPiece.Copy();
+            while (!IsColliding(shadow))
+            {
+                shadow.Move(Vector2Int.down);
+            }
+
+            shadow.Move(Vector2Int.up);
+            CurrentShadow = shadow;
+            UpdateShadowEvent(CurrentShadow);
         }
 
         private bool IsInBounds(Vector2Int position)
@@ -57,6 +80,7 @@ namespace tetris
             if (!IsColliding(copy))
             {
                 CurrentPiece.Move(direction);
+                UpdateShadow();
             }
         }
 
@@ -73,6 +97,7 @@ namespace tetris
             if (!IsColliding(copy))
             {
                 CurrentPiece.Rotate(direction);
+                UpdateShadow();
             }
         }
 
@@ -93,6 +118,7 @@ namespace tetris
             else
             {
                 CurrentPiece.Move(Vector2Int.down);
+                UpdateShadow();
             }
         }
 
@@ -109,6 +135,7 @@ namespace tetris
 
             PiecePlacedEvent(CurrentPiece);
             CurrentPiece = DequeuePiece();
+            UpdateShadow();
             if (CurrentPiece == null)
             {
                 finished = true;
@@ -137,6 +164,11 @@ namespace tetris
         protected virtual void PieceSpawnedEvent(Piece piece)
         {
             OnPieceSpawned?.Invoke(piece);
+        }
+
+        protected virtual void UpdateShadowEvent(Piece piece)
+        {
+            OnUpdateShadow?.Invoke(piece);
         }
     }
 }
