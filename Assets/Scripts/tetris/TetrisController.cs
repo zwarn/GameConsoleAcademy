@@ -20,7 +20,7 @@ namespace tetris
 
         private void Update()
         {
-            if (_tetrisSystem.finished)
+            if (_tetrisSystem.Finished)
             {
                 return;
             }
@@ -60,6 +60,11 @@ namespace tetris
             if (Input.GetKeyDown(KeyCode.E))
             {
                 _tetrisSystem.Rotate(-1);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _tetrisSystem.Swap();
             }
         }
 

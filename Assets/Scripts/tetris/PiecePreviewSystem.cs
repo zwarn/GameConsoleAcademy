@@ -7,6 +7,7 @@ namespace tetris
     public class PiecePreviewSystem : MonoBehaviour
     {
         [SerializeField] public List<PiecePreview> previews;
+        [SerializeField] public PiecePreview swapPreview;
         [SerializeField] public TetrisController tetrisController;
 
         private TetrisSystem _tetrisSystem;
@@ -15,8 +16,20 @@ namespace tetris
         {
             _tetrisSystem = tetrisController.GetTetrisSystem();
             _tetrisSystem.OnPieceSpawned += UpdatePreview;
+            _tetrisSystem.OnUpdateSwap += UpdateSwap;
 
             UpdatePreview(null);
+        }
+
+        private void UpdateSwap(Piece swap)
+        {
+            swapPreview.SetData(swap);
+        }
+
+        private void OnDestroy()
+        {
+            _tetrisSystem.OnPieceSpawned -= UpdatePreview;
+            _tetrisSystem.OnUpdateSwap -= UpdateSwap;
         }
 
         private void UpdatePreview(Piece _)

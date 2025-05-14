@@ -10,6 +10,7 @@ namespace tetris
         public event Action<Piece> OnPiecePlaced;
         public event Action<Piece> OnPieceSpawned;
         public event Action<Piece> OnUpdateShadow;
+        public event Action<Piece> OnUpdateSwap;
 
         private readonly int _width;
         private readonly int _height;
@@ -19,7 +20,8 @@ namespace tetris
 
         public Piece CurrentPiece;
         public Piece CurrentShadow;
-        public bool finished = false;
+        public Piece CurrentSwap;
+        public bool Finished = false;
 
         public TetrisSystem(int width, int height, Queue<Piece> pieces)
         {
@@ -27,7 +29,7 @@ namespace tetris
             _height = height;
             _limit = height;
             _pieces = pieces;
-            CurrentPiece = DequeuePiece();
+            DequeueNextPiece();
             UpdateShadow();
         }
 
@@ -101,6 +103,29 @@ namespace tetris
             }
         }
 
+        public void Swap()
+        {
+            if (CurrentPiece == null || _pieces.Count == 0)
+            {
+                return;
+            }
+
+            if (CurrentSwap == null)
+            {
+                CurrentSwap = CurrentPiece;
+                DequeueNextPiece();
+            }
+            else
+            {
+                var swap = CurrentPiece;
+                MakeCurrentPiece(CurrentSwap);
+                CurrentSwap = swap;
+            }
+
+            CurrentSwap.Position = Vector2Int.zero;
+            UpdateSwapEvent(CurrentSwap);
+        }
+
         public void Drop()
         {
             if (CurrentPiece == null)
@@ -129,31 +154,42 @@ namespace tetris
                 _placedTiles[pair.Key] = pair.Value;
                 if (pair.Key.y >= _limit)
                 {
-                    finished = true;
+                    Finished = true;
                 }
             }
 
             PiecePlacedEvent(CurrentPiece);
-            CurrentPiece = DequeuePiece();
-            UpdateShadow();
-            if (CurrentPiece == null)
-            {
-                finished = true;
-            }
-
-            PieceSpawnedEvent(CurrentPiece);
+            DequeueNextPiece();
         }
 
-        private Piece DequeuePiece()
+        private void DequeueNextPiece()
         {
             if (_pieces.Count == 0)
             {
-                return null;
+                MakeCurrentPiece(null);
             }
 
             var next = _pieces.Dequeue();
-            next.Position = new Vector2Int(_width / 2, _limit + 1);
-            return next;
+            MakeCurrentPiece(next);
+        }
+
+        private void MakeCurrentPiece(Piece piece)
+        {
+            CurrentPiece = piece;
+
+            if (CurrentPiece != null)
+            {
+                CurrentPiece.Position = new Vector2Int(_width / 2, _limit + 1);
+            }
+
+            UpdateShadow();
+
+            if (CurrentPiece == null)
+            {
+                Finished = true;
+            }
+
+            PieceSpawnedEvent(CurrentPiece);
         }
 
         protected virtual void PiecePlacedEvent(Piece piece)
@@ -169,6 +205,11 @@ namespace tetris
         protected virtual void UpdateShadowEvent(Piece piece)
         {
             OnUpdateShadow?.Invoke(piece);
+        }
+
+        protected virtual void UpdateSwapEvent(Piece piece)
+        {
+            OnUpdateSwap?.Invoke(piece);
         }
     }
 }
