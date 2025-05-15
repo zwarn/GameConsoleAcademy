@@ -69,6 +69,11 @@ namespace tetris
             return num < 0 ? _pieces.ToList() : _pieces.Take(num).ToList();
         }
 
+        public int RemainingPieces()
+        {
+            return _pieces.Count;
+        }
+
         public void Move(Vector2Int direction)
         {
             if (CurrentPiece == null)
