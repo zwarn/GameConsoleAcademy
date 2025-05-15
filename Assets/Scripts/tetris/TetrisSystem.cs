@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -76,14 +76,24 @@ namespace tetris
                 return;
             }
 
-            var copy = CurrentPiece.Copy();
+            if (CanMove(CurrentPiece, direction))
+            {
+                Move(CurrentPiece, direction);
+            }
+        }
+
+        private bool CanMove(Piece piece, Vector2Int direction)
+        {
+            var copy = piece.Copy();
             copy.Move(direction);
 
-            if (!IsColliding(copy))
-            {
-                CurrentPiece.Move(direction);
-                UpdateShadow();
-            }
+            return !IsColliding(copy);
+        }
+
+        private void Move(Piece piece, Vector2Int direction)
+        {
+            piece.Move(direction);
+            UpdateShadow();
         }
 
         public void Rotate(int direction)
@@ -93,14 +103,24 @@ namespace tetris
                 return;
             }
 
-            var copy = CurrentPiece.Copy();
+            if (CanRotate(CurrentPiece, direction))
+            {
+                Rotate(CurrentPiece, direction);
+            }
+        }
+
+        private bool CanRotate(Piece piece, int direction)
+        {
+            var copy = piece.Copy();
             copy.Rotate(direction);
 
-            if (!IsColliding(copy))
-            {
-                CurrentPiece.Rotate(direction);
-                UpdateShadow();
-            }
+            return !IsColliding(copy);
+        }
+
+        private void Rotate(Piece piece, int direction)
+        {
+            piece.Rotate(direction);
+            UpdateShadow();
         }
 
         public void Swap()
@@ -133,17 +153,14 @@ namespace tetris
                 return;
             }
 
-            var copy = CurrentPiece.Copy();
-            copy.Move(Vector2Int.down);
-
-            if (IsColliding(copy))
+            if (CanMove(CurrentPiece, Vector2Int.down))
             {
-                LockPiece();
+                Move(CurrentPiece, Vector2Int.down);
+                UpdateShadow();
             }
             else
             {
-                CurrentPiece.Move(Vector2Int.down);
-                UpdateShadow();
+                LockPiece();
             }
         }
 
