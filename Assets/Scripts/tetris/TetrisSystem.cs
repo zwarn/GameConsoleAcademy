@@ -189,6 +189,7 @@ namespace tetris
             if (_pieces.Count == 0)
             {
                 MakeCurrentPiece(null);
+                return;
             }
 
             var next = _pieces.Dequeue();

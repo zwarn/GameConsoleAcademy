@@ -1210,6 +1210,7 @@ MonoBehaviour:
   width: 20
   height: 12
   gameplaySpeed: 1
+  tileAmount: 25
   pieceGenerator: {fileID: 1626677205}
 --- !u!4 &1626677204
 Transform:

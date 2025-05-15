@@ -8,6 +8,7 @@ namespace tetris
         [SerializeField] public int width = 10;
         [SerializeField] public int height = 20;
         [SerializeField] private float gameplaySpeed = 1f;
+        [SerializeField] private int tileAmount = 25;
         [SerializeField] private PieceGenerator pieceGenerator;
 
         private TetrisSystem _tetrisSystem;
@@ -15,7 +16,7 @@ namespace tetris
 
         private void Awake()
         {
-            _tetrisSystem = new TetrisSystem(width, height, pieceGenerator.GeneratePieces(25));
+            _tetrisSystem = new TetrisSystem(width, height, pieceGenerator.GeneratePieces(tileAmount));
         }
 
         private void Update()
