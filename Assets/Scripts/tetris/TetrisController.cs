@@ -67,6 +67,11 @@ namespace tetris
             {
                 _tetrisSystem.Swap();
             }
+
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                _tetrisSystem.QuickDrop();
+            }
         }
 
         public TetrisSystem GetTetrisSystem()

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -167,6 +167,20 @@ namespace tetris
             {
                 LockPiece();
             }
+        }
+
+        public void QuickDrop()
+        {
+            if (CurrentPiece == null)
+            {
+                return;
+            }
+
+            while (CanMove(CurrentPiece, Vector2Int.down))
+            {
+                Move(CurrentPiece, Vector2Int.down);
+            }
+            LockPiece();
         }
 
         private void LockPiece()
