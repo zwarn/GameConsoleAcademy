@@ -180,6 +180,7 @@ namespace tetris
             {
                 Move(CurrentPiece, Vector2Int.down);
             }
+
             LockPiece();
         }
 
@@ -227,6 +228,11 @@ namespace tetris
             }
 
             PieceSpawnedEvent(CurrentPiece);
+        }
+
+        public Dictionary<Vector2Int, Tile> Tiles()
+        {
+            return _placedTiles.ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
         protected virtual void PiecePlacedEvent(Piece piece)

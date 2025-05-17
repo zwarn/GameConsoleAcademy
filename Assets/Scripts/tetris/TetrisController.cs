@@ -1,4 +1,5 @@
 ﻿using System;
+using tetris.score;
 using UnityEngine;
 
 namespace tetris
@@ -13,6 +14,7 @@ namespace tetris
 
         private TetrisSystem _tetrisSystem;
         private float _timeAccumulator;
+        private bool finished = false;
 
         private void Awake()
         {
@@ -21,9 +23,16 @@ namespace tetris
 
         private void Update()
         {
-            if (_tetrisSystem.Finished)
+
+            if (finished)
             {
                 return;
+            }
+            
+            if (_tetrisSystem.Finished)
+            {
+                finished = true;
+                TetrisScore.Score(_tetrisSystem.Tiles(), width, height);
             }
 
             _timeAccumulator += Time.deltaTime;
