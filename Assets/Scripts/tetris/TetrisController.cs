@@ -14,25 +14,28 @@ namespace tetris
 
         private TetrisSystem _tetrisSystem;
         private float _timeAccumulator;
-        private bool finished = false;
+        private bool isFinished = false;
 
         private void Awake()
         {
             _tetrisSystem = new TetrisSystem(width, height, pieceGenerator.GeneratePieces(tileAmount));
         }
 
+        private void Start()
+        {
+            _tetrisSystem.OnGameFinish += GameFinished;
+        }
+
+        private void OnDestroy()
+        {
+            _tetrisSystem.OnGameFinish -= GameFinished;
+        }
+
         private void Update()
         {
-            if (finished)
+            if (isFinished)
             {
                 return;
-            }
-
-            if (_tetrisSystem.Finished)
-            {
-                finished = true;
-                int score = TetrisScore.Score(_tetrisSystem.Tiles(), width, height);
-                Debug.Log($"score : {score}");
             }
 
             _timeAccumulator += Time.deltaTime;
@@ -81,6 +84,13 @@ namespace tetris
             {
                 _tetrisSystem.QuickDrop();
             }
+        }
+
+        private void GameFinished()
+        {
+            isFinished = true;
+            int score = TetrisScore.Score(_tetrisSystem.Tiles(), width, height);
+            Debug.Log($"score : {score}");
         }
 
         public TetrisSystem GetTetrisSystem()

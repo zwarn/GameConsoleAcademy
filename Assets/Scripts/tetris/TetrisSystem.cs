@@ -9,8 +9,11 @@ namespace tetris
     {
         public event Action<Piece> OnPiecePlaced;
         public event Action<Piece> OnPieceSpawned;
+        public event Action<Vector2Int> OnMovePiece;
+        public event Action<int> OnRotatePiece;
         public event Action<Piece> OnUpdateShadow;
         public event Action<Piece> OnUpdateSwap;
+        public event Action OnGameFinish;
 
         private readonly int _width;
         private readonly int _height;
@@ -21,7 +24,6 @@ namespace tetris
         public Piece CurrentPiece;
         public Piece CurrentShadow;
         public Piece CurrentSwap;
-        public bool Finished = false;
 
         public TetrisSystem(int width, int height, Queue<Piece> pieces)
         {
@@ -83,7 +85,7 @@ namespace tetris
 
             if (CanMove(CurrentPiece, direction))
             {
-                Move(CurrentPiece, direction);
+                DoMove(direction);
             }
         }
 
@@ -95,9 +97,10 @@ namespace tetris
             return !IsColliding(copy);
         }
 
-        private void Move(Piece piece, Vector2Int direction)
+        private void DoMove(Vector2Int direction)
         {
-            piece.Move(direction);
+            CurrentPiece.Move(direction);
+            MovePieceEvent(direction);
             UpdateShadow();
         }
 
@@ -110,7 +113,7 @@ namespace tetris
 
             if (CanRotate(CurrentPiece, direction))
             {
-                Rotate(CurrentPiece, direction);
+                DoRotate(direction);
             }
         }
 
@@ -122,9 +125,10 @@ namespace tetris
             return !IsColliding(copy);
         }
 
-        private void Rotate(Piece piece, int direction)
+        private void DoRotate(int direction)
         {
-            piece.Rotate(direction);
+            CurrentPiece.Rotate(direction);
+            RotatePieceEvent(direction);
             UpdateShadow();
         }
 
@@ -160,7 +164,7 @@ namespace tetris
 
             if (CanMove(CurrentPiece, Vector2Int.down))
             {
-                Move(CurrentPiece, Vector2Int.down);
+                DoMove(Vector2Int.down);
                 UpdateShadow();
             }
             else
@@ -178,7 +182,7 @@ namespace tetris
 
             while (CanMove(CurrentPiece, Vector2Int.down))
             {
-                Move(CurrentPiece, Vector2Int.down);
+                DoMove(Vector2Int.down);
             }
 
             LockPiece();
@@ -191,7 +195,7 @@ namespace tetris
                 _placedTiles[pair.Key] = pair.Value;
                 if (pair.Key.y >= _limit)
                 {
-                    Finished = true;
+                    FinishGameEvent();
                 }
             }
 
@@ -224,7 +228,7 @@ namespace tetris
 
             if (CurrentPiece == null)
             {
-                Finished = true;
+                FinishGameEvent();
             }
 
             PieceSpawnedEvent(CurrentPiece);
@@ -254,5 +258,22 @@ namespace tetris
         {
             OnUpdateSwap?.Invoke(piece);
         }
+
+        protected virtual void MovePieceEvent(Vector2Int direction)
+        {
+            OnMovePiece?.Invoke(direction);
+        }
+
+        protected virtual void RotatePieceEvent(int direction)
+        {
+            OnRotatePiece?.Invoke(direction);
+        }
+
+        protected virtual void FinishGameEvent()
+        {
+            OnGameFinish?.Invoke();
+        }
+        
+        
     }
 }
