@@ -13,24 +13,62 @@ namespace tetris
         public event Action<int> OnRotatePiece;
         public event Action<Piece> OnUpdateShadow;
         public event Action<Piece> OnUpdateSwap;
+        public event Action<Dictionary<Vector2Int, Tile>> OnPlacedTilesChanged;
         public event Action OnGameFinish;
 
-        private readonly int _width;
-        private readonly int _height;
-        private readonly int _limit;
-        private readonly Dictionary<Vector2Int, Tile> _placedTiles = new();
+        private int _width;
+        private int _height;
+        private Dictionary<Vector2Int, Tile> _placedTiles = new();
         private Queue<Piece> _pieces;
 
         public Piece CurrentPiece;
         public Piece CurrentShadow;
         public Piece CurrentSwap;
 
-        public TetrisSystem(int width, int height, Queue<Piece> pieces)
+        public TetrisSystem(TetrisState state)
         {
-            _width = width;
-            _height = height;
-            _limit = height;
-            _pieces = pieces;
+            _width = state.Width;
+            _height = state.Height;
+            _pieces = new Queue<Piece>(state.UpcomingPieces);
+
+            CurrentSwap = state.Swap;
+            if (CurrentSwap != null)
+            {
+                CurrentSwap.Position = Vector2Int.zero;
+            }
+
+            UpdateSwapEvent(CurrentSwap);
+
+            _placedTiles = state.PlacedTiles.ToDictionary(pair => pair.Key, pair => pair.Value);
+            PlacedTilesChanged(_placedTiles);
+
+            DequeueNextPiece();
+            UpdateShadow();
+        }
+
+        public TetrisState GetState()
+        {
+            return new TetrisState(_width, _height, _pieces.ToList(), CurrentSwap,
+                _placedTiles.ToDictionary(pair => pair.Key, pair => pair.Value));
+        }
+
+        public void LoadState(TetrisState state)
+        {
+            _width = state.Width;
+            _height = state.Height;
+            _pieces = new Queue<Piece>(state.UpcomingPieces);
+
+            CurrentSwap = state.Swap;
+            if (CurrentSwap != null)
+            {
+                CurrentSwap.Position = Vector2Int.zero;
+            }
+
+            UpdateSwapEvent(CurrentSwap);
+
+            _placedTiles = state.PlacedTiles.ToDictionary(pair => pair.Key, pair => pair.Value);
+            PlacedTilesChanged(_placedTiles);
+
             DequeueNextPiece();
             UpdateShadow();
         }
@@ -193,7 +231,7 @@ namespace tetris
             foreach (var pair in CurrentPiece.GetRotatedTranslatedTiles())
             {
                 _placedTiles[pair.Key] = pair.Value;
-                if (pair.Key.y >= _limit)
+                if (pair.Key.y >= _height)
                 {
                     FinishGameEvent();
                 }
@@ -221,7 +259,7 @@ namespace tetris
 
             if (CurrentPiece != null)
             {
-                CurrentPiece.Position = new Vector2Int(_width / 2, _limit + 1);
+                CurrentPiece.Position = new Vector2Int(_width / 2, _height + 1);
             }
 
             UpdateShadow();
@@ -239,41 +277,44 @@ namespace tetris
             return _placedTiles.ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
-        protected virtual void PiecePlacedEvent(Piece piece)
+        private void PiecePlacedEvent(Piece piece)
         {
             OnPiecePlaced?.Invoke(piece);
         }
 
-        protected virtual void PieceSpawnedEvent(Piece piece)
+        private void PieceSpawnedEvent(Piece piece)
         {
             OnPieceSpawned?.Invoke(piece);
         }
 
-        protected virtual void UpdateShadowEvent(Piece piece)
+        private void UpdateShadowEvent(Piece piece)
         {
             OnUpdateShadow?.Invoke(piece);
         }
 
-        protected virtual void UpdateSwapEvent(Piece piece)
+        private void UpdateSwapEvent(Piece piece)
         {
             OnUpdateSwap?.Invoke(piece);
         }
 
-        protected virtual void MovePieceEvent(Vector2Int direction)
+        private void MovePieceEvent(Vector2Int direction)
         {
             OnMovePiece?.Invoke(direction);
         }
 
-        protected virtual void RotatePieceEvent(int direction)
+        private void RotatePieceEvent(int direction)
         {
             OnRotatePiece?.Invoke(direction);
         }
 
-        protected virtual void FinishGameEvent()
+        private void PlacedTilesChanged(Dictionary<Vector2Int, Tile> changedTiles)
+        {
+            OnPlacedTilesChanged?.Invoke(changedTiles);
+        }
+
+        private void FinishGameEvent()
         {
             OnGameFinish?.Invoke();
         }
-        
-        
     }
 }

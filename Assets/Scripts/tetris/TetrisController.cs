@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using tetris.score;
 using UnityEngine;
 
@@ -16,19 +18,27 @@ namespace tetris
         private float _timeAccumulator;
         private bool isFinished = false;
 
+        private Stack<TetrisState> _history = new Stack<TetrisState>();
+        private TetrisState _currentState = null;
+
         private void Awake()
         {
-            _tetrisSystem = new TetrisSystem(width, height, pieceGenerator.GeneratePieces(tileAmount));
+            var tetrisState = new TetrisState(width, height, pieceGenerator.GeneratePieces(tileAmount).ToList(), null,
+                new Dictionary<Vector2Int, Tile>());
+            _tetrisSystem = new TetrisSystem(tetrisState);
+            RecordHistory(tetrisState);
         }
 
         private void Start()
         {
             _tetrisSystem.OnGameFinish += GameFinished;
+            _tetrisSystem.OnPiecePlaced += RecordHistory;
         }
 
         private void OnDestroy()
         {
             _tetrisSystem.OnGameFinish -= GameFinished;
+            _tetrisSystem.OnPiecePlaced -= RecordHistory;
         }
 
         private void Update()
@@ -83,6 +93,38 @@ namespace tetris
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
                 _tetrisSystem.QuickDrop();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                PerformUndo();
+            }
+        }
+
+
+        private void RecordHistory(Piece _)
+        {
+            var tetrisState = _tetrisSystem.GetState();
+            if (_currentState != null)
+            {
+                RecordHistory(_currentState);
+            }
+
+            _currentState = tetrisState;
+        }
+
+        private void RecordHistory(TetrisState tetrisState)
+        {
+            _history.Push(tetrisState);
+        }
+
+        private void PerformUndo()
+        {
+            if (!isFinished && _history.Count > 0)
+            {
+                var tetrisState = _history.Count == 1 ? _history.Peek() : _history.Pop();
+                _tetrisSystem.LoadState(tetrisState);
+                _currentState = tetrisState;
             }
         }
 

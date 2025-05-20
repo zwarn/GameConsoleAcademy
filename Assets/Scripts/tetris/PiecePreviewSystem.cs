@@ -37,7 +37,15 @@ namespace tetris
             var nextPieces = _tetrisSystem.NextPieces(previews.Count);
             for (int i = 0; i < previews.Count; i++)
             {
-                previews[i].SetData(nextPieces.Count > i ? nextPieces[i] : null);
+                if (nextPieces.Count <= i)
+                {
+                    previews[i].SetData(null);
+                    return;
+                }
+
+                var nextPiece = nextPieces[i];
+                nextPiece.Position = Vector2Int.zero;
+                previews[i].SetData(nextPiece);
             }
         }
     }

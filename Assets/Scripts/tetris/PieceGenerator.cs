@@ -10,13 +10,13 @@ namespace tetris
         private readonly int _numberOfColors = 3;
         private readonly int _tilesPerPiece = 4;
 
-        public Queue<Piece> GeneratePieces(int amount)
+        public List<Piece> GeneratePieces(int amount)
         {
-            Queue<Piece> result = new Queue<Piece>();
+            List<Piece> result = new List<Piece>();
 
             for (int i = 0; i < amount; i++)
             {
-                result.Enqueue(GeneratePiece());
+                result.Add(GeneratePiece());
             }
 
             return result;

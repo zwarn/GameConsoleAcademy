@@ -24,6 +24,7 @@ namespace tetris
 
             _tetrisSystem.OnPieceSpawned += UpdateView;
             _tetrisSystem.OnPiecePlaced += PiecePlaced;
+            _tetrisSystem.OnPlacedTilesChanged += ReloadPlacedTiles;
             UpdateView(_tetrisSystem.CurrentPiece);
         }
 
@@ -31,8 +32,31 @@ namespace tetris
         {
             _tetrisSystem.OnPieceSpawned -= UpdateView;
             _tetrisSystem.OnPiecePlaced -= PiecePlaced;
+            _tetrisSystem.OnPlacedTilesChanged -= ReloadPlacedTiles;
         }
 
+        private void ReloadPlacedTiles(Dictionary<Vector2Int, Tile> tiles)
+        {
+            Clear();
+
+            foreach (var pair in tiles)
+            {
+                var tileView = Instantiate(tileViewPrefab, tileViewParent);
+                tileView.SetData(pair.Key, pair.Value.Color);
+                placedTiles.Add(pair.Key, tileView);
+            }
+        }
+
+        private void Clear()
+        {
+            foreach (var tileView in placedTiles.Values)
+            {
+                Destroy(tileView.gameObject);
+            }
+
+            placedTiles.Clear();
+        }
+        
         private void PiecePlaced(Piece piece)
         {
             var newTiles = piece.GetRotatedTranslatedTiles();
