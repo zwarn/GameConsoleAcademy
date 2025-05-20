@@ -25,13 +25,6 @@ namespace tetris
             _tetrisSystem.OnPieceSpawned += UpdateView;
             _tetrisSystem.OnPiecePlaced += PiecePlaced;
             UpdateView(_tetrisSystem.CurrentPiece);
-
-            background.transform.localScale = new Vector3(tetrisController.width, tetrisController.height, 1);
-            background.transform.localPosition = new Vector3(tetrisController.width / 2f - 0.5f,
-                tetrisController.height / 2f - 0.5f, 0);
-
-            tetrisCamera.transform.localPosition =
-                new Vector3(tetrisController.width / 2f, tetrisController.height / 2f, -10);
         }
 
         private void OnDestroy()
