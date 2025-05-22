@@ -54,53 +54,7 @@ namespace tetris
                 _timeAccumulator -= gameplaySpeed;
                 _tetrisSystem.Drop();
             }
-
-            HandleInput();
         }
-
-        private void HandleInput()
-        {
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                _tetrisSystem.Move(Vector2Int.left);
-            }
-
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                _tetrisSystem.Move(Vector2Int.right);
-            }
-
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                _tetrisSystem.Move(Vector2Int.down);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                _tetrisSystem.Rotate(1);
-            }
-
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                _tetrisSystem.Rotate(-1);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                _tetrisSystem.Swap();
-            }
-
-            if (Input.GetKeyDown(KeyCode.LeftControl))
-            {
-                _tetrisSystem.QuickDrop();
-            }
-
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                PerformUndo();
-            }
-        }
-
 
         private void RecordHistory(Piece _)
         {
@@ -118,7 +72,7 @@ namespace tetris
             _history.Push(tetrisState);
         }
 
-        private void PerformUndo()
+        public void Undo()
         {
             if (!isFinished && _history.Count > 0)
             {
