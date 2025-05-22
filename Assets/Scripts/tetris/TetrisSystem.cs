@@ -27,23 +27,7 @@ namespace tetris
 
         public TetrisSystem(TetrisState state)
         {
-            _width = state.Width;
-            _height = state.Height;
-            _pieces = new Queue<Piece>(state.UpcomingPieces);
-
-            CurrentSwap = state.Swap;
-            if (CurrentSwap != null)
-            {
-                CurrentSwap.Position = Vector2Int.zero;
-            }
-
-            UpdateSwapEvent(CurrentSwap);
-
-            _placedTiles = state.PlacedTiles.ToDictionary(pair => pair.Key, pair => pair.Value);
-            PlacedTilesChanged(_placedTiles);
-
-            DequeueNextPiece();
-            UpdateShadow();
+            LoadState(state);
         }
 
         public TetrisState GetState()
