@@ -71,6 +71,15 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""ae73f54e-7afe-4927-aead-c544f9dc26cf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -326,6 +335,28 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""action"": ""Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e2a6273c-19e7-4a35-8014-47a4a5db13c3"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""40efb044-b301-4796-9795-1f6476233b8d"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -400,6 +431,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_Tetris_Drop = m_Tetris.FindAction("Drop", throwIfNotFound: true);
         m_Tetris_Undo = m_Tetris.FindAction("Undo", throwIfNotFound: true);
         m_Tetris_Swap = m_Tetris.FindAction("Swap", throwIfNotFound: true);
+        m_Tetris_Pause = m_Tetris.FindAction("Pause", throwIfNotFound: true);
     }
 
     ~@InputSystem()
@@ -471,6 +503,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_Tetris_Drop;
     private readonly InputAction m_Tetris_Undo;
     private readonly InputAction m_Tetris_Swap;
+    private readonly InputAction m_Tetris_Pause;
     public struct TetrisActions
     {
         private @InputSystem m_Wrapper;
@@ -480,6 +513,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         public InputAction @Drop => m_Wrapper.m_Tetris_Drop;
         public InputAction @Undo => m_Wrapper.m_Tetris_Undo;
         public InputAction @Swap => m_Wrapper.m_Tetris_Swap;
+        public InputAction @Pause => m_Wrapper.m_Tetris_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Tetris; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -504,6 +538,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Swap.started += instance.OnSwap;
             @Swap.performed += instance.OnSwap;
             @Swap.canceled += instance.OnSwap;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(ITetrisActions instance)
@@ -523,6 +560,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Swap.started -= instance.OnSwap;
             @Swap.performed -= instance.OnSwap;
             @Swap.canceled -= instance.OnSwap;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(ITetrisActions instance)
@@ -592,5 +632,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         void OnDrop(InputAction.CallbackContext context);
         void OnUndo(InputAction.CallbackContext context);
         void OnSwap(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

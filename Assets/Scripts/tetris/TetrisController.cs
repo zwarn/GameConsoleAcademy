@@ -14,9 +14,11 @@ namespace tetris
         [SerializeField] private int tileAmount = 25;
         [SerializeField] private PieceGenerator pieceGenerator;
 
+        public bool IsPaused { get; set; }
+        
         private TetrisSystem _tetrisSystem;
         private float _timeAccumulator;
-        private bool isFinished = false;
+        private bool _isFinished = false;
 
         private Stack<TetrisState> _history = new Stack<TetrisState>();
         private TetrisState _currentState = null;
@@ -43,7 +45,7 @@ namespace tetris
 
         private void Update()
         {
-            if (isFinished)
+            if (_isFinished || IsPaused)
             {
                 return;
             }
@@ -74,7 +76,7 @@ namespace tetris
 
         public void Undo()
         {
-            if (!isFinished && _history.Count > 0)
+            if (!_isFinished && _history.Count > 0)
             {
                 var tetrisState = _history.Count == 1 ? _history.Peek() : _history.Pop();
                 _tetrisSystem.LoadState(tetrisState);
@@ -84,7 +86,7 @@ namespace tetris
 
         private void GameFinished()
         {
-            isFinished = true;
+            _isFinished = true;
             int score = TetrisScore.Score(_tetrisSystem.Tiles(), width, height);
             Debug.Log($"score : {score}");
         }

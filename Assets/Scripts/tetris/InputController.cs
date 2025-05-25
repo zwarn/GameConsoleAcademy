@@ -15,6 +15,7 @@ namespace tetris
         private TetrisSystem _tetrisSystem;
         private InputSystem _inputSystem;
 
+        private float _timeAccumulator = 0;
         private Vector2Int _movementDirection;
         private float _timeToMove = 0;
         private int _rotationDirection;
@@ -39,31 +40,40 @@ namespace tetris
             _inputSystem.Tetris.Drop.performed += Drop;
             _inputSystem.Tetris.Undo.performed += Undo;
             _inputSystem.Tetris.Swap.performed += Swap;
+            _inputSystem.Tetris.Pause.performed += Pause;
         }
 
         private void OnDisable()
         {
             _inputSystem.Disable();
-            
+
             _inputSystem.Tetris.Drop.performed -= Drop;
             _inputSystem.Tetris.Undo.performed -= Undo;
             _inputSystem.Tetris.Swap.performed -= Swap;
+            _inputSystem.Tetris.Pause.performed -= Pause;
         }
 
         private void Update()
         {
+            if (tetrisController.IsPaused)
+            {
+                return;
+            }
+
+            _timeAccumulator += Time.deltaTime;
+
             MovementInput();
             RotationInput();
 
-            if (Time.time > _timeToMove && _movementDirection.magnitude > movementDeadzone)
+            if (_timeAccumulator >= _timeToMove && _movementDirection.magnitude > movementDeadzone)
             {
-                _timeToMove = Time.time + movementCooldown;
+                _timeToMove = _timeAccumulator + movementCooldown;
                 _tetrisSystem.Move(_movementDirection);
             }
 
-            if (Time.time > _timeToRotate && Mathf.Abs(_rotationDirection) > rotationDeadzone)
+            if (_timeAccumulator >= _timeToRotate && Mathf.Abs(_rotationDirection) > rotationDeadzone)
             {
-                _timeToRotate = Time.time + rotationCooldown;
+                _timeToRotate = _timeAccumulator + rotationCooldown;
                 _tetrisSystem.Rotate(_rotationDirection);
             }
         }
@@ -103,13 +113,20 @@ namespace tetris
         {
             _tetrisSystem.QuickDrop();
         }
+
         private void Undo(InputAction.CallbackContext context)
         {
             tetrisController.Undo();
         }
+
         private void Swap(InputAction.CallbackContext context)
         {
             _tetrisSystem.Swap();
+        }
+
+        private void Pause(InputAction.CallbackContext context)
+        {
+            tetrisController.IsPaused = !tetrisController.IsPaused;
         }
     }
 }
