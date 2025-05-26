@@ -15,12 +15,12 @@ namespace tetris
         [SerializeField] private PieceGenerator pieceGenerator;
 
         public bool IsPaused { get; set; }
-        
+
         private TetrisSystem _tetrisSystem;
         private float _timeAccumulator;
         private bool _isFinished = false;
 
-        private Stack<TetrisState> _history = new Stack<TetrisState>();
+        private readonly Stack<TetrisState> _history = new Stack<TetrisState>();
         private TetrisState _currentState = null;
 
         private void Awake()
@@ -74,16 +74,6 @@ namespace tetris
             _history.Push(tetrisState);
         }
 
-        public void Undo()
-        {
-            if (!_isFinished && _history.Count > 0)
-            {
-                var tetrisState = _history.Count == 1 ? _history.Peek() : _history.Pop();
-                _tetrisSystem.LoadState(tetrisState);
-                _currentState = tetrisState;
-            }
-        }
-
         private void GameFinished()
         {
             _isFinished = true;
@@ -94,6 +84,56 @@ namespace tetris
         public TetrisSystem GetTetrisSystem()
         {
             return _tetrisSystem;
+        }
+
+        public void PerformMove(Vector2Int direction)
+        {
+            if (_isFinished)
+            {
+                return;
+            }
+
+            _tetrisSystem.Move(direction);
+        }
+
+        public void PerformRotate(int direction)
+        {
+            if (_isFinished)
+            {
+                return;
+            }
+
+            _tetrisSystem.Rotate(direction);
+        }
+
+        public void PerformQuickDrop()
+        {
+            if (_isFinished)
+            {
+                return;
+            }
+
+            _tetrisSystem.QuickDrop();
+        }
+
+        public void PerformUndo()
+        {
+            if (!_isFinished && _history.Count > 0)
+            {
+                var tetrisState = _history.Count == 1 ? _history.Peek() : _history.Pop();
+                _tetrisSystem.LoadState(tetrisState);
+                _currentState = tetrisState;
+            }
+        }
+
+        public void PerformSwap()
+        {
+            if (_isFinished)
+            {
+                return;
+            }
+
+            _tetrisSystem.Swap();
         }
     }
 }

@@ -12,7 +12,6 @@ namespace tetris
         [SerializeField] private float rotationDeadzone = 0.5f;
         [SerializeField] private float rotationCooldown = 0.25f;
 
-        private TetrisSystem _tetrisSystem;
         private InputSystem _inputSystem;
 
         private float _timeAccumulator = 0;
@@ -26,12 +25,6 @@ namespace tetris
         {
             _inputSystem = new InputSystem();
         }
-
-        private void Start()
-        {
-            _tetrisSystem = tetrisController.GetTetrisSystem();
-        }
-
 
         private void OnEnable()
         {
@@ -68,13 +61,13 @@ namespace tetris
             if (_timeAccumulator >= _timeToMove && _movementDirection.magnitude > movementDeadzone)
             {
                 _timeToMove = _timeAccumulator + movementCooldown;
-                _tetrisSystem.Move(_movementDirection);
+                tetrisController.PerformMove(_movementDirection);
             }
 
             if (_timeAccumulator >= _timeToRotate && Mathf.Abs(_rotationDirection) > rotationDeadzone)
             {
                 _timeToRotate = _timeAccumulator + rotationCooldown;
-                _tetrisSystem.Rotate(_rotationDirection);
+                tetrisController.PerformRotate(_rotationDirection);
             }
         }
 
@@ -111,17 +104,17 @@ namespace tetris
 
         private void Drop(InputAction.CallbackContext context)
         {
-            _tetrisSystem.QuickDrop();
+            tetrisController.PerformQuickDrop();
         }
 
         private void Undo(InputAction.CallbackContext context)
         {
-            tetrisController.Undo();
+            tetrisController.PerformUndo();
         }
 
         private void Swap(InputAction.CallbackContext context)
         {
-            _tetrisSystem.Swap();
+            tetrisController.PerformSwap();
         }
 
         private void Pause(InputAction.CallbackContext context)
