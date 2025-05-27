@@ -11,22 +11,24 @@ namespace tetris.score
         {
             Tile[,] tilesArray = ConvertTiles(tiles, width, height);
 
-            List<TetrisGroup> groups = ConvertToGroups(tilesArray);
 
-            var groupedByType = groups
-                .GroupBy(g => g.Type)
-                .ToDictionary(g => g.Key, g => g.ToList());
-
-            var numberOfEmptyEnclosedGroups = groupedByType[TetrisGroupType.Empty]
+            var emptyGroups = GetColoredGroups(tilesArray, TetrisGroupType.Empty);
+            var numberOfEmptyEnclosedGroups = emptyGroups
                 .Count(group => group.GetTiles().All(pos => pos.y != height - 1));
-            var numberOfRedGroups = groupedByType[TetrisGroupType.Red].Count;
-            var numberOfBlueGroups = groupedByType[TetrisGroupType.Blue].Count;
-            var numberOfYellowGroups = groupedByType[TetrisGroupType.Yellow].Count;
+
+            var redGroups = GetColoredGroups(tilesArray, TetrisGroupType.Red);
+            var numberOfRedGroups = redGroups.Count;
+
+            var blueGroups = GetColoredGroups(tilesArray, TetrisGroupType.Blue);
+            var numberOfBlueGroups = blueGroups.Count;
+
+            var yellowGroups = GetColoredGroups(tilesArray, TetrisGroupType.Yellow);
+            var numberOfYellowGroups = yellowGroups.Count;
 
             return 13 - numberOfEmptyEnclosedGroups - numberOfRedGroups - numberOfBlueGroups - numberOfYellowGroups;
         }
 
-        private static List<TetrisGroup> ConvertToGroups(Tile[,] tilesArray)
+        private static List<TetrisGroup> GetColoredGroups(Tile[,] tilesArray, TetrisGroupType targetColor)
         {
             List<TetrisGroup> groups = new List<TetrisGroup>();
             List<Vector2Int> visited = new List<Vector2Int>();
@@ -42,7 +44,10 @@ namespace tetris.score
                     }
 
                     var type = DetermineType(tilesArray[x, y]);
-                    groups.Add(FillGroup(tilesArray, type, x, y, visited));
+                    if (type == targetColor)
+                    {
+                        groups.Add(FillGroup(tilesArray, type, x, y, visited));
+                    }
                 }
             }
 
@@ -125,18 +130,24 @@ namespace tetris.score
 
             if (tile.Color == 0)
             {
+                return TetrisGroupType.Black;
+            }
+
+            if (tile.Color == 1 || tile.Color == 4 || tile.Color == 5 || tile.Color == 7)
+            {
                 return TetrisGroupType.Red;
             }
 
-            if (tile.Color == 1)
+            if (tile.Color == 2 || tile.Color == 4 || tile.Color == 6 || tile.Color == 7)
             {
                 return TetrisGroupType.Blue;
             }
 
-            if (tile.Color == 2)
+            if (tile.Color == 3 || tile.Color == 5 || tile.Color == 6 || tile.Color == 7)
             {
                 return TetrisGroupType.Yellow;
             }
+
 
             throw new Exception($"Unexpected color for tile {tile}");
         }
@@ -164,6 +175,7 @@ namespace tetris.score
         Red,
         Blue,
         Yellow,
+        Black,
     }
 
     public class TetrisGroup
