@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,7 +8,8 @@ namespace tetris
 {
     public class PieceGenerator : MonoBehaviour
     {
-        private readonly int _numberOfColors = 3;
+        [SerializeField] private List<int> colorGenerationWeight = new List<int> { 0, 60, 30, 10 };
+
         private readonly int _tilesPerPiece = 4;
 
         public List<Piece> GeneratePieces(int amount)
@@ -45,7 +47,8 @@ namespace tetris
         private Tile[] GenerateColors()
         {
             Tile[] result = new Tile[_tilesPerPiece];
-            int color = Random.Range(0, _numberOfColors);
+            int[] candidateColors = ChooseNumberOfMixedColors();
+            int color = candidateColors[Random.Range(0, candidateColors.Length)];
 
             for (int i = 0; i < _tilesPerPiece; i++)
             {
@@ -54,6 +57,36 @@ namespace tetris
 
             return result;
         }
+
+        private int[] ChooseNumberOfMixedColors()
+        {
+            int max = colorGenerationWeight.Sum();
+            var random = Random.Range(0, max);
+
+            int accumulator = colorGenerationWeight[0];
+
+            if (random < accumulator)
+            {
+                return new[] { 0 };
+            }
+
+            accumulator += colorGenerationWeight[1];
+
+            if (random < accumulator)
+            {
+                return new[] { 1, 2, 3 };
+            }
+
+            accumulator += colorGenerationWeight[2];
+
+            if (random < accumulator)
+            {
+                return new[] { 4, 5, 6 };
+            }
+
+            return new[] { 7 };
+        }
+
 
         private Vector2Int[] GeneratePositions()
         {

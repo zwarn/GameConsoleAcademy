@@ -162,8 +162,8 @@ namespace tetris.score
     {
         Empty,
         Red,
-        Yellow,
         Blue,
+        Yellow,
     }
 
     public class TetrisGroup
