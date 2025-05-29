@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace tetris
 {
@@ -9,12 +10,10 @@ namespace tetris
         [SerializeField] private TetrisController tetrisController;
 
         [SerializeField] private PieceView pieceView;
-        [SerializeField] private TileView tileViewPrefab;
-        [SerializeField] private Transform tileViewParent;
         [SerializeField] private GameObject background;
         [SerializeField] private Camera tetrisCamera;
-
-        public Dictionary<Vector2Int, TileView> placedTiles = new();
+        [SerializeField] private Tilemap tilemap;
+        [SerializeField] private List<ColorTileMatching> colorTileMatching;
 
         private TetrisSystem _tetrisSystem;
 
@@ -41,36 +40,44 @@ namespace tetris
 
             foreach (var pair in tiles)
             {
-                var tileView = Instantiate(tileViewPrefab, tileViewParent);
-                tileView.SetData(pair.Key, pair.Value.Color);
-                placedTiles.Add(pair.Key, tileView);
+                tilemap.SetTile(ToVector3(pair.Key), ColorToTile(pair.Value.Color));
             }
+        }
+
+        private TileBase ColorToTile(int color)
+        {
+            return colorTileMatching.Find(matching => matching.color == color).tile;
+        }
+
+        private Vector3Int ToVector3(Vector2Int vector)
+        {
+            return new Vector3Int(vector.x, vector.y);
         }
 
         private void Clear()
         {
-            foreach (var tileView in placedTiles.Values)
-            {
-                Destroy(tileView.gameObject);
-            }
-
-            placedTiles.Clear();
+            tilemap.ClearAllTiles();
         }
-        
+
         private void PiecePlaced(Piece piece)
         {
             var newTiles = piece.GetRotatedTranslatedTiles();
             foreach (var pair in newTiles)
             {
-                var tileView = Instantiate(tileViewPrefab, tileViewParent);
-                tileView.SetData(pair.Key, pair.Value.Color);
-                placedTiles.Add(pair.Key, tileView);
+                tilemap.SetTile(ToVector3(pair.Key), ColorToTile(pair.Value.Color));
             }
         }
 
         private void UpdateView(Piece piece)
         {
             pieceView.SetData(piece);
+        }
+
+        [Serializable]
+        public class ColorTileMatching
+        {
+            public int color;
+            public TileBase tile;
         }
     }
 }
