@@ -420,6 +420,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tetrisController: {fileID: 1626677203}
+  movementDeadzone: 0.5
+  movementCooldown: 0.2
+  rotationDeadzone: 0.5
+  rotationCooldown: 0.25
 --- !u!4 &399129324 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2722135944184223664, guid: e66a6849686fe5a44b4cd3e8c59dbee9, type: 3}
@@ -1351,6 +1355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28da4b3e02644eddaad99beff130b598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colorGenerationWeight: 000000003c0000001e0000000a000000
 --- !u!1001 &1689661665
 PrefabInstance:
   m_ObjectHideFlags: 0
