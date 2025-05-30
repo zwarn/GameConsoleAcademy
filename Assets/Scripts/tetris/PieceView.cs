@@ -1,22 +1,30 @@
 using System;
-using System.Collections.Generic;
 using tetris;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PieceView : MonoBehaviour
 {
-    [SerializeField] private TileView tileViewPrefab;
-    [SerializeField] private Transform tileViewParent;
+    [SerializeField] private Tilemap tilemap;
+    [SerializeField] private TetrisColorRepository colorRepository;
 
-    private List<TileView> _tileViews = new();
+    private TetrisColorRepository GetColorRepository()
+    {
+        if (colorRepository == null)
+        {
+            colorRepository = TetrisColorRepository.Instance;
+        }
+
+        return colorRepository;
+    }
+
     private Piece _current;
-
 
     public void SetData(Piece piece)
     {
         _current = piece;
         Clear();
-        
+
         if (_current == null)
         {
             return;
@@ -24,22 +32,15 @@ public class PieceView : MonoBehaviour
 
         foreach (var pair in piece.GetTiles())
         {
-            var view = Instantiate(tileViewPrefab, tileViewParent);
-            view.SetData(pair.Key, pair.Value.Color);
-            _tileViews.Add(view);
+            GetColorRepository().AddToTilemap(tilemap, pair.Key, pair.Value.Color);
         }
-        
+
         DoUpdate();
     }
 
     private void Clear()
     {
-        foreach (var tileView in _tileViews)
-        {
-            Destroy(tileView.gameObject);
-        }
-
-        _tileViews.Clear();
+        tilemap.ClearAllTiles();
     }
 
     private void Update()

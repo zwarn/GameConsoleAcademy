@@ -13,7 +13,7 @@ namespace tetris
         [SerializeField] private GameObject background;
         [SerializeField] private Camera tetrisCamera;
         [SerializeField] private Tilemap tilemap;
-        [SerializeField] private List<ColorTileMatching> colorTileMatching;
+        [SerializeField] private TetrisColorRepository colorRepository;
 
         private TetrisSystem _tetrisSystem;
 
@@ -40,19 +40,10 @@ namespace tetris
 
             foreach (var pair in tiles)
             {
-                tilemap.SetTile(ToVector3(pair.Key), ColorToTile(pair.Value.Color));
+                colorRepository.AddToTilemap(tilemap, pair.Key, pair.Value.Color);
             }
         }
 
-        private TileBase ColorToTile(int color)
-        {
-            return colorTileMatching.Find(matching => matching.color == color).tile;
-        }
-
-        private Vector3Int ToVector3(Vector2Int vector)
-        {
-            return new Vector3Int(vector.x, vector.y);
-        }
 
         private void Clear()
         {
@@ -64,20 +55,13 @@ namespace tetris
             var newTiles = piece.GetRotatedTranslatedTiles();
             foreach (var pair in newTiles)
             {
-                tilemap.SetTile(ToVector3(pair.Key), ColorToTile(pair.Value.Color));
+                colorRepository.AddToTilemap(tilemap, pair.Key, pair.Value.Color);
             }
         }
 
         private void UpdateView(Piece piece)
         {
             pieceView.SetData(piece);
-        }
-
-        [Serializable]
-        public class ColorTileMatching
-        {
-            public int color;
-            public TileBase tile;
         }
     }
 }

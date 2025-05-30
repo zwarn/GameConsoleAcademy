@@ -19,14 +19,16 @@ namespace tilemaps
 
         public override bool RuleMatch(int neighbor, TileBase other)
         {
-            if (other is ColorRuleTile otherRule)
+            if (other is not ColorRuleTile otherRule)
             {
-                var match = otherRule.colors.Intersect(colors).Any();
-                switch (neighbor)
-                {
-                    case TilingRuleOutput.Neighbor.This: return match;
-                    case TilingRuleOutput.Neighbor.NotThis: return !match;
-                }
+                return base.RuleMatch(neighbor, other);
+            }
+
+            var match = otherRule.colors.Intersect(colors).Any();
+            switch (neighbor)
+            {
+                case TilingRuleOutput.Neighbor.This: return match;
+                case TilingRuleOutput.Neighbor.NotThis: return !match;
             }
 
             return base.RuleMatch(neighbor, other);
