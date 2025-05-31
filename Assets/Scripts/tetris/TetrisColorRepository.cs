@@ -24,7 +24,19 @@ namespace tetris
         {
             tilemap.SetTile(ToVector3(position), ColorToTile(color));
         }
-
+        
+        public bool IsRed(int color)
+        {
+            return color == 1 || color == 4 || color == 5 || color == 7;
+        }
+        public bool IsBlue(int color)
+        {
+            return color == 2 || color == 4 || color == 6 || color == 7;
+        }
+        public bool IsYellow(int color)
+        {
+            return color == 3 || color == 4 || color == 6 || color == 7;
+        }
 
         [Serializable]
         public class ColorTileMatching

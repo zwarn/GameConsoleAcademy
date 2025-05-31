@@ -14,6 +14,7 @@ namespace DefaultNamespace
         [SerializeField] private RemainingTilesCount remainingTilesCount;
         [SerializeField] private PiecePreviewSystem piecePreviewSystem;
         [SerializeField] private DropShadow dropShadow;
+        [SerializeField] private TetrisLayerVisualizer layerVisualizer;
         
         public override void InstallBindings()
         {
@@ -25,6 +26,7 @@ namespace DefaultNamespace
             Container.Bind<RemainingTilesCount>().FromInstance(remainingTilesCount);
             Container.Bind<PiecePreviewSystem>().FromInstance(piecePreviewSystem);
             Container.Bind<DropShadow>().FromInstance(dropShadow);
+            Container.Bind<TetrisLayerVisualizer>().FromInstance(layerVisualizer);
             
             Container.Bind<PieceView>().FromComponentInHierarchy().AsTransient();
         }
