@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Zenject;
@@ -16,6 +17,7 @@ namespace tetris
         [Inject] private TetrisColorRepository _colorRepository;
         
         private TetrisSystem _tetrisSystem;
+        private int _showLayer = 0;
 
         private void Start()
         {
@@ -28,6 +30,32 @@ namespace tetris
         {
             _tetrisSystem.OnPiecePlaced -= PiecePlaced;
             _tetrisSystem.OnPlacedTilesChanged -= ReloadPlacedTiles;
+        }
+
+        public void SetLayer(int layer)
+        {
+            _showLayer = layer;
+        }
+
+        public void ShiftLayer(int delta)
+        {
+            _showLayer += delta;
+            if (_showLayer < 0)
+            {
+                _showLayer += 4;
+            }
+
+            if (_showLayer > 3)
+            {
+                _showLayer -= 4;
+            }
+        }
+        
+        private void Update()
+        {
+            tileMapRed.gameObject.SetActive(_showLayer == 1);
+            tileMapBlue.gameObject.SetActive(_showLayer == 2);
+            tileMapYellow.gameObject.SetActive(_showLayer == 3);
         }
 
         private void PiecePlaced(Piece piece)

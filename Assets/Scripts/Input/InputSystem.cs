@@ -80,6 +80,51 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SetLayerRed"",
+                    ""type"": ""Button"",
+                    ""id"": ""2e2b81ce-37b4-4bea-8ac0-b988cda914d5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SetLayerBlue"",
+                    ""type"": ""Button"",
+                    ""id"": ""aebeb57f-85d0-422c-95da-4b42f6c3b09d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SetLayerYellow"",
+                    ""type"": ""Button"",
+                    ""id"": ""be444fcb-9628-4717-9111-bd6ecaf79e89"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SetLayerNoLayer"",
+                    ""type"": ""Button"",
+                    ""id"": ""61d7b7b8-e069-4462-a1e7-7aa080fcdc37"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShiftLayer"",
+                    ""type"": ""Button"",
+                    ""id"": ""fefbea52-2c60-4071-a16e-6d15e6f49363"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -357,6 +402,94 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5f2b4fe4-2159-4322-b98e-6ea1d70bb127"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SetLayerRed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe13e58a-54fb-4f3b-b636-851edd95bc14"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SetLayerBlue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""05325876-ecdc-49ce-8bca-0326a684ae89"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SetLayerYellow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d70829c7-0b3d-4c02-b905-5ada295d4831"",
+                    ""path"": ""<Keyboard>/0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SetLayerNoLayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb6fab1b-9bf5-464c-be7b-7d0900dc7f06"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""SetLayerNoLayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""a9172ba3-5cb0-48a7-8d5d-fdfbf74559f3"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShiftLayer"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""143de1aa-2c4f-4c9b-a395-15376eeebea3"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""ShiftLayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""122a4757-e6ba-488f-8742-95bcbd26001e"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""ShiftLayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -432,6 +565,11 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_Tetris_Undo = m_Tetris.FindAction("Undo", throwIfNotFound: true);
         m_Tetris_Swap = m_Tetris.FindAction("Swap", throwIfNotFound: true);
         m_Tetris_Pause = m_Tetris.FindAction("Pause", throwIfNotFound: true);
+        m_Tetris_SetLayerRed = m_Tetris.FindAction("SetLayerRed", throwIfNotFound: true);
+        m_Tetris_SetLayerBlue = m_Tetris.FindAction("SetLayerBlue", throwIfNotFound: true);
+        m_Tetris_SetLayerYellow = m_Tetris.FindAction("SetLayerYellow", throwIfNotFound: true);
+        m_Tetris_SetLayerNoLayer = m_Tetris.FindAction("SetLayerNoLayer", throwIfNotFound: true);
+        m_Tetris_ShiftLayer = m_Tetris.FindAction("ShiftLayer", throwIfNotFound: true);
     }
 
     ~@InputSystem()
@@ -504,6 +642,11 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_Tetris_Undo;
     private readonly InputAction m_Tetris_Swap;
     private readonly InputAction m_Tetris_Pause;
+    private readonly InputAction m_Tetris_SetLayerRed;
+    private readonly InputAction m_Tetris_SetLayerBlue;
+    private readonly InputAction m_Tetris_SetLayerYellow;
+    private readonly InputAction m_Tetris_SetLayerNoLayer;
+    private readonly InputAction m_Tetris_ShiftLayer;
     public struct TetrisActions
     {
         private @InputSystem m_Wrapper;
@@ -514,6 +657,11 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         public InputAction @Undo => m_Wrapper.m_Tetris_Undo;
         public InputAction @Swap => m_Wrapper.m_Tetris_Swap;
         public InputAction @Pause => m_Wrapper.m_Tetris_Pause;
+        public InputAction @SetLayerRed => m_Wrapper.m_Tetris_SetLayerRed;
+        public InputAction @SetLayerBlue => m_Wrapper.m_Tetris_SetLayerBlue;
+        public InputAction @SetLayerYellow => m_Wrapper.m_Tetris_SetLayerYellow;
+        public InputAction @SetLayerNoLayer => m_Wrapper.m_Tetris_SetLayerNoLayer;
+        public InputAction @ShiftLayer => m_Wrapper.m_Tetris_ShiftLayer;
         public InputActionMap Get() { return m_Wrapper.m_Tetris; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -541,6 +689,21 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @SetLayerRed.started += instance.OnSetLayerRed;
+            @SetLayerRed.performed += instance.OnSetLayerRed;
+            @SetLayerRed.canceled += instance.OnSetLayerRed;
+            @SetLayerBlue.started += instance.OnSetLayerBlue;
+            @SetLayerBlue.performed += instance.OnSetLayerBlue;
+            @SetLayerBlue.canceled += instance.OnSetLayerBlue;
+            @SetLayerYellow.started += instance.OnSetLayerYellow;
+            @SetLayerYellow.performed += instance.OnSetLayerYellow;
+            @SetLayerYellow.canceled += instance.OnSetLayerYellow;
+            @SetLayerNoLayer.started += instance.OnSetLayerNoLayer;
+            @SetLayerNoLayer.performed += instance.OnSetLayerNoLayer;
+            @SetLayerNoLayer.canceled += instance.OnSetLayerNoLayer;
+            @ShiftLayer.started += instance.OnShiftLayer;
+            @ShiftLayer.performed += instance.OnShiftLayer;
+            @ShiftLayer.canceled += instance.OnShiftLayer;
         }
 
         private void UnregisterCallbacks(ITetrisActions instance)
@@ -563,6 +726,21 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @SetLayerRed.started -= instance.OnSetLayerRed;
+            @SetLayerRed.performed -= instance.OnSetLayerRed;
+            @SetLayerRed.canceled -= instance.OnSetLayerRed;
+            @SetLayerBlue.started -= instance.OnSetLayerBlue;
+            @SetLayerBlue.performed -= instance.OnSetLayerBlue;
+            @SetLayerBlue.canceled -= instance.OnSetLayerBlue;
+            @SetLayerYellow.started -= instance.OnSetLayerYellow;
+            @SetLayerYellow.performed -= instance.OnSetLayerYellow;
+            @SetLayerYellow.canceled -= instance.OnSetLayerYellow;
+            @SetLayerNoLayer.started -= instance.OnSetLayerNoLayer;
+            @SetLayerNoLayer.performed -= instance.OnSetLayerNoLayer;
+            @SetLayerNoLayer.canceled -= instance.OnSetLayerNoLayer;
+            @ShiftLayer.started -= instance.OnShiftLayer;
+            @ShiftLayer.performed -= instance.OnShiftLayer;
+            @ShiftLayer.canceled -= instance.OnShiftLayer;
         }
 
         public void RemoveCallbacks(ITetrisActions instance)
@@ -633,5 +811,10 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         void OnUndo(InputAction.CallbackContext context);
         void OnSwap(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnSetLayerRed(InputAction.CallbackContext context);
+        void OnSetLayerBlue(InputAction.CallbackContext context);
+        void OnSetLayerYellow(InputAction.CallbackContext context);
+        void OnSetLayerNoLayer(InputAction.CallbackContext context);
+        void OnShiftLayer(InputAction.CallbackContext context);
     }
 }

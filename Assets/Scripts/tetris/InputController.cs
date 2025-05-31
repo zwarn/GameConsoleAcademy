@@ -13,6 +13,7 @@ namespace tetris
         [SerializeField] private float rotationCooldown = 0.25f;
         
         [Inject] private TetrisController _tetrisController;
+        [Inject] private TetrisLayerVisualizer _layerVisualizer;
 
         private InputSystem _inputSystem;
 
@@ -36,8 +37,12 @@ namespace tetris
             _inputSystem.Tetris.Undo.performed += Undo;
             _inputSystem.Tetris.Swap.performed += Swap;
             _inputSystem.Tetris.Pause.performed += Pause;
+            _inputSystem.Tetris.SetLayerRed.performed += SetLayerRed;
+            _inputSystem.Tetris.SetLayerBlue.performed += SetLayerBlue;
+            _inputSystem.Tetris.SetLayerYellow.performed += SetLayerYellow;
+            _inputSystem.Tetris.ShiftLayer.performed += ShiftLayer;
+            
         }
-
         private void OnDisable()
         {
             _inputSystem.Disable();
@@ -46,6 +51,35 @@ namespace tetris
             _inputSystem.Tetris.Undo.performed -= Undo;
             _inputSystem.Tetris.Swap.performed -= Swap;
             _inputSystem.Tetris.Pause.performed -= Pause;
+            _inputSystem.Tetris.SetLayerRed.performed -= SetLayerRed;
+            _inputSystem.Tetris.SetLayerBlue.performed -= SetLayerBlue;
+            _inputSystem.Tetris.SetLayerYellow.performed -= SetLayerYellow;
+            _inputSystem.Tetris.ShiftLayer.performed -= ShiftLayer;
+        }
+
+        private void ShiftLayer(InputAction.CallbackContext context)
+        {
+            var value = Mathf.RoundToInt(context.ReadValue<float>());
+            _layerVisualizer.ShiftLayer(value);
+        }
+
+        private void SetLayer(int targetLayer)
+        {
+            _layerVisualizer.SetLayer(targetLayer);
+        }
+
+
+        private void SetLayerRed(InputAction.CallbackContext _)
+        {
+            SetLayer(1);
+        }
+        private void SetLayerBlue(InputAction.CallbackContext _)
+        {
+            SetLayer(2);
+        }
+        private void SetLayerYellow(InputAction.CallbackContext _)
+        {
+            SetLayer(3);
         }
 
         private void Update()
