@@ -1,64 +1,57 @@
-using System;
-using tetris;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Zenject;
 
-public class PieceView : MonoBehaviour
+namespace tetris
 {
-    [SerializeField] private Tilemap tilemap;
-    [SerializeField] private TetrisColorRepository colorRepository;
-
-    private TetrisColorRepository GetColorRepository()
+    public class PieceView : MonoBehaviour
     {
-        if (colorRepository == null)
+        [SerializeField] private Tilemap tilemap;
+    
+        [Inject] private TetrisColorRepository _colorRepository;
+
+        private Piece _current;
+
+        public void SetData(Piece piece)
         {
-            colorRepository = TetrisColorRepository.Instance;
+            _current = piece;
+            Clear();
+
+            if (_current == null)
+            {
+                return;
+            }
+
+            foreach (var pair in piece.GetTiles())
+            {
+                _colorRepository.AddToTilemap(tilemap, pair.Key, pair.Value.Color);
+            }
+
+            DoUpdate();
         }
 
-        return colorRepository;
-    }
-
-    private Piece _current;
-
-    public void SetData(Piece piece)
-    {
-        _current = piece;
-        Clear();
-
-        if (_current == null)
+        private void Clear()
         {
-            return;
+            tilemap.ClearAllTiles();
         }
 
-        foreach (var pair in piece.GetTiles())
+        private void Update()
         {
-            GetColorRepository().AddToTilemap(tilemap, pair.Key, pair.Value.Color);
+            DoUpdate();
         }
 
-        DoUpdate();
-    }
-
-    private void Clear()
-    {
-        tilemap.ClearAllTiles();
-    }
-
-    private void Update()
-    {
-        DoUpdate();
-    }
-
-    private void DoUpdate()
-    {
-        if (_current == null)
+        private void DoUpdate()
         {
-            return;
+            if (_current == null)
+            {
+                return;
+            }
+
+            var position = _current.Position;
+            transform.localPosition = new Vector3(position.x, position.y);
+
+            var rotation = _current.Rotation;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90 * rotation));
         }
-
-        var position = _current.Position;
-        transform.localPosition = new Vector3(position.x, position.y);
-
-        var rotation = _current.Rotation;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90 * rotation));
     }
 }

@@ -1,18 +1,20 @@
 ﻿using System;
 using UnityEngine;
+using Zenject;
 
 namespace tetris
 {
     public class DropShadow : MonoBehaviour
     {
-        [SerializeField] private TetrisController tetrisController;
         [SerializeField] private PieceView shadow;
+        
+        [Inject] private TetrisController _tetrisController;
 
         private TetrisSystem _tetrisSystem;
 
         private void Start()
         {
-            _tetrisSystem = tetrisController.GetTetrisSystem();
+            _tetrisSystem = _tetrisController.GetTetrisSystem();
             _tetrisSystem.OnUpdateShadow += UpdateShadow;
             UpdateShadow(_tetrisSystem.CurrentShadow);
         }

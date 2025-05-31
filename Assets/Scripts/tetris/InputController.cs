@@ -1,16 +1,18 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 
 namespace tetris
 {
     public class InputController : MonoBehaviour
     {
-        [SerializeField] private TetrisController tetrisController;
         [SerializeField] private float movementDeadzone = 0.5f;
         [SerializeField] private float movementCooldown = 0.2f;
         [SerializeField] private float rotationDeadzone = 0.5f;
         [SerializeField] private float rotationCooldown = 0.25f;
+        
+        [Inject] private TetrisController _tetrisController;
 
         private InputSystem _inputSystem;
 
@@ -48,7 +50,7 @@ namespace tetris
 
         private void Update()
         {
-            if (tetrisController.IsPaused)
+            if (_tetrisController.IsPaused)
             {
                 return;
             }
@@ -61,13 +63,13 @@ namespace tetris
             if (_timeAccumulator >= _timeToMove && _movementDirection.magnitude > movementDeadzone)
             {
                 _timeToMove = _timeAccumulator + movementCooldown;
-                tetrisController.PerformMove(_movementDirection);
+                _tetrisController.PerformMove(_movementDirection);
             }
 
             if (_timeAccumulator >= _timeToRotate && Mathf.Abs(_rotationDirection) > rotationDeadzone)
             {
                 _timeToRotate = _timeAccumulator + rotationCooldown;
-                tetrisController.PerformRotate(_rotationDirection);
+                _tetrisController.PerformRotate(_rotationDirection);
             }
         }
 
@@ -104,22 +106,22 @@ namespace tetris
 
         private void Drop(InputAction.CallbackContext context)
         {
-            tetrisController.PerformQuickDrop();
+            _tetrisController.PerformQuickDrop();
         }
 
         private void Undo(InputAction.CallbackContext context)
         {
-            tetrisController.PerformUndo();
+            _tetrisController.PerformUndo();
         }
 
         private void Swap(InputAction.CallbackContext context)
         {
-            tetrisController.PerformSwap();
+            _tetrisController.PerformSwap();
         }
 
         private void Pause(InputAction.CallbackContext context)
         {
-            tetrisController.IsPaused = !tetrisController.IsPaused;
+            _tetrisController.IsPaused = !_tetrisController.IsPaused;
         }
     }
 }

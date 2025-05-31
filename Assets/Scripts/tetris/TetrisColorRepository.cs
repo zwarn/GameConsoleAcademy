@@ -7,17 +7,6 @@ namespace tetris
 {
     public class TetrisColorRepository : MonoBehaviour
     {
-        public static TetrisColorRepository Instance;
-
-        //TODO replace with DependencyInjection
-        private void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-        }
-
         [SerializeField] private List<ColorTileMatching> colorTileMatching;
 
 

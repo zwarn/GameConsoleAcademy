@@ -419,7 +419,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e58d1c8c7934cc7b3cc0a94181097e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tetrisController: {fileID: 1626677203}
   movementDeadzone: 0.5
   movementCooldown: 0.2
   rotationDeadzone: 0.5
@@ -890,7 +889,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5309fbb36fae439b8578051e14a8ad0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tetrisController: {fileID: 1626677203}
   shadow: {fileID: 1918828860}
 --- !u!1 &1117042316
 GameObject:
@@ -1383,8 +1381,92 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   label: {fileID: 198430988}
-  tetrisController: {fileID: 1626677203}
   offset: 3
+--- !u!1 &1588800337
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1588800340}
+  - component: {fileID: 1588800339}
+  - component: {fileID: 1588800338}
+  m_Layer: 0
+  m_Name: SceneContext
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1588800338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588800337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3768b2f575264250966d19ae1492c583, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tetrisController: {fileID: 1626677203}
+  pieceGenerator: {fileID: 1626677205}
+  inputController: {fileID: 377615018}
+  colorRepository: {fileID: 1251445963}
+  tetrisView: {fileID: 1305461851}
+  remainingTilesCount: {fileID: 1405535450}
+  piecePreviewSystem: {fileID: 1701744783}
+  dropShadow: {fileID: 761552198}
+--- !u!114 &1588800339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588800337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scriptableObjectInstallers: []
+  _monoInstallers:
+  - {fileID: 1588800338}
+  _installerPrefabs: []
+  _autoRun: 1
+  OnPreInstall:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostInstall:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPreResolve:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostResolve:
+    m_PersistentCalls:
+      m_Calls: []
+  _parentNewObjectsUnderSceneContext: 0
+  _contractNames: []
+  _parentContractNames: []
+--- !u!4 &1588800340
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588800337}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1620866796
 GameObject:
   m_ObjectHideFlags: 0
@@ -1624,7 +1706,6 @@ MonoBehaviour:
   height: 12
   gameplaySpeed: 1
   tileAmount: 25
-  pieceGenerator: {fileID: 1626677205}
 --- !u!4 &1626677204
 Transform:
   m_ObjectHideFlags: 0
@@ -1761,7 +1842,6 @@ MonoBehaviour:
   - {fileID: 704937185}
   - {fileID: 399129325}
   swapPreview: {fileID: 1933279214}
-  tetrisController: {fileID: 1626677203}
 --- !u!4 &1820719943 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2722135944184223664, guid: e66a6849686fe5a44b4cd3e8c59dbee9, type: 3}
@@ -1989,3 +2069,4 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 151615892}
   - {fileID: 623210009}
+  - {fileID: 1588800340}

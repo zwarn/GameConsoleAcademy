@@ -2,24 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Zenject;
 
 namespace tetris
 {
     public class TetrisView : MonoBehaviour
     {
-        [SerializeField] private TetrisController tetrisController;
 
         [SerializeField] private PieceView pieceView;
         [SerializeField] private GameObject background;
         [SerializeField] private Camera tetrisCamera;
         [SerializeField] private Tilemap tilemap;
-        [SerializeField] private TetrisColorRepository colorRepository;
+        
+        [Inject] private TetrisController _tetrisController;
+        [Inject] private TetrisColorRepository _colorRepository;
 
         private TetrisSystem _tetrisSystem;
 
         private void Start()
         {
-            _tetrisSystem = tetrisController.GetTetrisSystem();
+            _tetrisSystem = _tetrisController.GetTetrisSystem();
 
             _tetrisSystem.OnPieceSpawned += UpdateView;
             _tetrisSystem.OnPiecePlaced += PiecePlaced;
@@ -40,7 +42,7 @@ namespace tetris
 
             foreach (var pair in tiles)
             {
-                colorRepository.AddToTilemap(tilemap, pair.Key, pair.Value.Color);
+                _colorRepository.AddToTilemap(tilemap, pair.Key, pair.Value.Color);
             }
         }
 
@@ -55,7 +57,7 @@ namespace tetris
             var newTiles = piece.GetRotatedTranslatedTiles();
             foreach (var pair in newTiles)
             {
-                colorRepository.AddToTilemap(tilemap, pair.Key, pair.Value.Color);
+                _colorRepository.AddToTilemap(tilemap, pair.Key, pair.Value.Color);
             }
         }
 

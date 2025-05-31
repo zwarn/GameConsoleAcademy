@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Zenject;
 
 namespace tetris
 {
     public class PiecePreviewSystem : MonoBehaviour
     {
         [SerializeField] public List<PiecePreview> previews;
-        [SerializeField] public PiecePreview swapPreview;
-        [SerializeField] public TetrisController tetrisController;
+        [SerializeField] private PiecePreview swapPreview;
+        
+        [Inject] private TetrisController _tetrisController;
 
         private TetrisSystem _tetrisSystem;
 
         private void Start()
         {
-            _tetrisSystem = tetrisController.GetTetrisSystem();
+            _tetrisSystem = _tetrisController.GetTetrisSystem();
             _tetrisSystem.OnPieceSpawned += UpdatePreview;
             _tetrisSystem.OnUpdateSwap += UpdateSwap;
 

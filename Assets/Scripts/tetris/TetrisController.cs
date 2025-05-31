@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using tetris.score;
 using UnityEngine;
+using Zenject;
 
 namespace tetris
 {
@@ -12,7 +13,8 @@ namespace tetris
         [SerializeField] public int height = 20;
         [SerializeField] private float gameplaySpeed = 1f;
         [SerializeField] private int tileAmount = 25;
-        [SerializeField] private PieceGenerator pieceGenerator;
+        
+        [Inject] private PieceGenerator _pieceGenerator;
 
         public bool IsPaused { get; set; }
 
@@ -25,7 +27,7 @@ namespace tetris
 
         private void Awake()
         {
-            var tetrisState = new TetrisState(width, height, pieceGenerator.GeneratePieces(tileAmount).ToList(), null,
+            var tetrisState = new TetrisState(width, height, _pieceGenerator.GeneratePieces(tileAmount).ToList(), null,
                 new Dictionary<Vector2Int, Tile>());
             _tetrisSystem = new TetrisSystem(tetrisState);
             RecordHistory(tetrisState);
