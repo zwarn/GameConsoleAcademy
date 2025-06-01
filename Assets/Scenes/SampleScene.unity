@@ -2300,8 +2300,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8fd1da63680482aafa4250bed09463a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateClip: {fileID: 8300000, guid: b71d783cfa54b1f48aaa51621fd9de18, type: 3}
-  quickDropClip: {fileID: 8300000, guid: d32c03ba78d07ca4082eb3e4512956bb, type: 3}
+  rotateClip: {fileID: 8300000, guid: be521482685b1034893735c137375cf0, type: 3}
+  quickDropClip: {fileID: 8300000, guid: 09a9aac9375dd3b42a6c07dd7e967260, type: 3}
   lockClip: {fileID: 8300000, guid: 44ab2f00362097d49aeed2ec06713d54, type: 3}
   swapClip: {fileID: 8300000, guid: c110b6d84486c6049b662a522400cd6a, type: 3}
   undoClip: {fileID: 8300000, guid: 1d62458358afea343bf1a5cc4c11ea0c, type: 3}
