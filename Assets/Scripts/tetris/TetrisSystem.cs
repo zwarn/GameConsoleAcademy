@@ -11,6 +11,8 @@ namespace tetris
         public event Action<Piece> OnPieceSpawned;
         public event Action<Vector2Int> OnMovePiece;
         public event Action<int> OnRotatePiece;
+        public event Action OnSwap;
+        public event Action OnQuickdrop;
         public event Action<Piece> OnUpdateShadow;
         public event Action<Piece> OnUpdateSwap;
         public event Action<Dictionary<Vector2Int, Tile>> OnPlacedTilesChanged;
@@ -175,6 +177,7 @@ namespace tetris
 
             CurrentSwap.Position = Vector2Int.zero;
             UpdateSwapEvent(CurrentSwap);
+            SwapEvent();
         }
 
         public void Drop()
@@ -208,6 +211,7 @@ namespace tetris
             }
 
             LockPiece();
+            QuickdropEvent();
         }
 
         private void LockPiece()
@@ -299,6 +303,16 @@ namespace tetris
         private void FinishGameEvent()
         {
             OnGameFinish?.Invoke();
+        }
+
+        private void SwapEvent()
+        {
+            OnSwap?.Invoke();
+        }
+
+        private void QuickdropEvent()
+        {
+            OnQuickdrop?.Invoke();
         }
     }
 }

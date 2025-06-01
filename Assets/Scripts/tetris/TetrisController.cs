@@ -13,9 +13,10 @@ namespace tetris
         [SerializeField] public int height = 20;
         [SerializeField] private float gameplaySpeed = 1f;
         [SerializeField] private int tileAmount = 25;
-        
+
         [Inject] private PieceGenerator _pieceGenerator;
 
+        public event Action OnUndo;
         public bool IsPaused { get; set; }
 
         private TetrisSystem _tetrisSystem;
@@ -125,6 +126,7 @@ namespace tetris
                 var tetrisState = _history.Count == 1 ? _history.Peek() : _history.Pop();
                 _tetrisSystem.LoadState(tetrisState);
                 _currentState = tetrisState;
+                UndoEvent();
             }
         }
 
@@ -136,6 +138,11 @@ namespace tetris
             }
 
             _tetrisSystem.Swap();
+        }
+
+        private void UndoEvent()
+        {
+            OnUndo?.Invoke();
         }
     }
 }

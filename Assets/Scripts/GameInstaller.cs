@@ -15,7 +15,8 @@ namespace DefaultNamespace
         [SerializeField] private PiecePreviewSystem piecePreviewSystem;
         [SerializeField] private DropShadow dropShadow;
         [SerializeField] private TetrisLayerVisualizer layerVisualizer;
-        
+        [SerializeField] private AudioController audioController;
+
         public override void InstallBindings()
         {
             Container.Bind<TetrisController>().FromInstance(tetrisController);
@@ -27,7 +28,8 @@ namespace DefaultNamespace
             Container.Bind<PiecePreviewSystem>().FromInstance(piecePreviewSystem);
             Container.Bind<DropShadow>().FromInstance(dropShadow);
             Container.Bind<TetrisLayerVisualizer>().FromInstance(layerVisualizer);
-            
+            Container.Bind<AudioController>().FromInstance(audioController);
+
             Container.Bind<PieceView>().FromComponentInHierarchy().AsTransient();
         }
     }
